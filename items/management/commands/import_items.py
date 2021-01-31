@@ -2,9 +2,9 @@ import os
 import urllib.request
 
 import requests
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from food_boxes.settings import MEDIA_ROOT, MEDIA_ITEM_IMAGE_DIR
 from items.models import Item
 
 URL = 'https://raw.githubusercontent.com/stepik-a-w/drf-project-boxes/master/foodboxes.json'
@@ -17,7 +17,7 @@ class Command(BaseCommand):
         for item in response:
             image_url = item['image']
             image_name = item['image'].split('/')[-1]
-            path = os.path.join(MEDIA_ROOT, MEDIA_ITEM_IMAGE_DIR)
+            path = os.path.join(settings.MEDIA_ROOT, settings.MEDIA_ITEM_IMAGE_DIR)
             os.makedirs(path, exist_ok=True)
             urllib.request.urlretrieve(image_url, os.path.join(path, image_name))
 
@@ -26,7 +26,7 @@ class Command(BaseCommand):
                 defaults={
                     'title': item['title'],
                     'description': item['description'],
-                    'image': os.path.join(MEDIA_ITEM_IMAGE_DIR, image_name),
+                    'image': os.path.join(settings.MEDIA_ITEM_IMAGE_DIR, image_name),
                     'weight': item['weight_grams'],
                     'price': item['price'],
                 }

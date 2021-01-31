@@ -1,14 +1,19 @@
+from django.conf import settings
 from django.db import models
-
-from users.models import User
 
 
 class Reviews(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    STATUS_CHOICES = [
+        ('moderation', 'на модерации'),
+        ('published', 'опубликован'),
+        ('rejected', 'отклонен'),
+    ]
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
     text = models.TextField()
-    created_at = models.DateTimeField(null=True, blank=True)
-    published_at = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=64)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    status = models.CharField(max_length=64, choices=STATUS_CHOICES)
 
     def __str__(self):
         return self.author

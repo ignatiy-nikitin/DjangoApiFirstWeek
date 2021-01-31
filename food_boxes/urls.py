@@ -6,10 +6,13 @@ from food_boxes import settings
 
 
 api_url = [
-    path('item/', include('items.urls'))
+    path('items/', include('items.urls'))
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(api_url))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

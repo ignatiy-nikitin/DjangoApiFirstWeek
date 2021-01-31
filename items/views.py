@@ -15,5 +15,5 @@ def get_view_item(request, pk):
         'description': item.description,
         'image': request.build_absolute_uri(item.image.url),
         'weight': item.weight,
-        'price': item.price
+        'price': str(item.price)
     })

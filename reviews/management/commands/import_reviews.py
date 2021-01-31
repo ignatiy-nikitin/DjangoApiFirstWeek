@@ -24,8 +24,8 @@ class Command(BaseCommand):
                 }
             )
 
-            if review['created_at ']:
-                obj.created_at = datetime.strptime(review['created_at '], date_format).date()
+            if review['created_at']:
+                obj.created_at = datetime.strptime(review['created_at'], date_format).date()
                 obj.save()
             if review['published_at']:
                 obj.published_at = datetime.strptime(review['published_at'], date_format).date()
