@@ -1,19 +1,14 @@
-from rest_framework.decorators import api_view
-from rest_framework.generics import get_object_or_404
-from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import mixins, viewsets
+from rest_framework.filters import OrderingFilter
 
+from items.filters import ItemFilter
 from items.models import Item
+from items.serializers import ItemSerializer
 
 
-@api_view(http_method_names=['GET'])
-def get_view_item(request, pk):
-    item = get_object_or_404(Item, id=pk)
-
-    return Response({
-        'id': item.id,
-        'title': item.title,
-        'description': item.description,
-        'image': request.build_absolute_uri(item.image.url),
-        'weight': item.weight,
-        'price': str(item.price)
-    })
+class ItemListRetrieveModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ItemFilter
