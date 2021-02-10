@@ -20,12 +20,12 @@ api_url = [
     path('users/', include('users.urls')),
     path('items/', include('items.urls')),
     path('carts/', include('carts.urls')),
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0)),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(api_url)),
-    path('docs/', schema_view.with_ui('swagger', cache_timeout=0)),
 ]
 
 if settings.DEBUG:

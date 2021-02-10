@@ -10,7 +10,10 @@ class Cart(models.Model):
 
     @property
     def total_cost(self):
-        return sum(self.cart_items.total_price)
+        return sum([cart_item.total_price for cart_item in self.cart_items.all()])
+
+    def __str__(self):
+        return f'Cart {self.pk} of user {self.user.username}'
 
 
 class CartItem(models.Model):
@@ -18,6 +21,9 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.PositiveIntegerField(default=0)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f'CartItem {self.pk} of cart {self.cart.pk}'
 
     @property
     def total_price(self):

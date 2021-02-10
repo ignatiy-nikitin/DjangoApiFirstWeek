@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 
 
-class Reviews(models.Model):
+class Review(models.Model):
     STATUS_CHOICES = [
         ('moderation', 'на модерации'),
         ('published', 'опубликован'),
@@ -16,4 +16,4 @@ class Reviews(models.Model):
     status = models.CharField(max_length=64, choices=STATUS_CHOICES)
 
     def __str__(self):
-        return self.author
+        return self.author.username
