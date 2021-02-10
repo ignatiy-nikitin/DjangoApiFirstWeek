@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from django.core.management.base import BaseCommand
 
-from reviews.models import Reviews
+from reviews.models import Review
 from users.models import User
 
 URL = 'https://raw.githubusercontent.com/stepik-a-w/drf-project-boxes/master/reviews.json'
@@ -15,7 +15,7 @@ class Command(BaseCommand):
         date_format = '%Y-%m-%d'
 
         for review in response:
-            obj, _ = Reviews.objects.update_or_create(
+            obj, _ = Review.objects.update_or_create(
                 id=review['id'],
                 defaults={
                     'author': User.objects.get(id=review['author']),
