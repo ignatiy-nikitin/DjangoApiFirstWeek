@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from carts.models import Cart
+from orders.models import Order
 
 
 class User(AbstractUser):
@@ -14,5 +15,8 @@ class User(AbstractUser):
 
     @property
     def cart(self):
-        cart, _ = Cart.objects.get_or_create(user=self)
+        try:
+            cart = Cart.objects.get(user=self, orders=None)
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(user=self)
         return cart
