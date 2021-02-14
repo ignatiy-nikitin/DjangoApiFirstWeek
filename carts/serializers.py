@@ -40,7 +40,8 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if self.instance:
-            if self.instance.id != self.context['request'].user.cart.id:
+            if not self.context['request'].user.cart.cart_items.filter(id=self.instance.id).exists():
+            # if self.instance.id not in [cart_item.id for cart_item in self.context['request'].user.cart.cart_items.all()]:
                 raise ValidationError('Сan not change the cart item that exists in the order!')
         return attrs
 

@@ -30,6 +30,7 @@ class OrderListCreateSerializer(serializers.ModelSerializer):
     def validate_delivery_dt(self, value):
         if value <= timezone.now():
             raise ValidationError('Delivery date must be greater than the current date!')
+        return value
 
     def validate(self, attrs):
         if not self.context['request'].user.cart.cart_items.count():
@@ -68,3 +69,4 @@ class OrderRetrieveUpdateSerializer(serializers.ModelSerializer):
     def validate_delivery_dt(self, value):
         if value <= timezone.now():
             raise ValidationError('Delivery date must be greater than the current date!')
+        return value
