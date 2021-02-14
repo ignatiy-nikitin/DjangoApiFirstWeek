@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,7 +17,9 @@ class Migration(migrations.Migration):
                 ('text', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
                 ('published_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('status', models.CharField(choices=[('moderation', 'на модерации'), ('published', 'опубликован'), ('rejected', 'отклонен')], max_length=64)),
+                ('status', models.CharField(
+                    choices=[('moderation', 'на модерации'), ('published', 'опубликован'), ('rejected', 'отклонен')],
+                    max_length=64)),
             ],
         ),
     ]

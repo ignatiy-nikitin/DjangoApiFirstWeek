@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from carts.models import Cart, CartItem
 from items.models import Item
@@ -8,12 +9,12 @@ from items.serializers import ItemSerializer
 class CartItemSerializer(serializers.ModelSerializer):
     item = ItemSerializer(read_only=True)
     item_id = serializers.PrimaryKeyRelatedField(source='item', queryset=Item.objects.all())
-    total_price = serializers.DecimalField(max_digits=8, decimal_places=2)
+    total_price = serializers.DecimalField(max_digits=8, decimal_places=2, required=False)
 
     class Meta:
         model = CartItem
         fields = ['id', 'item', 'item_id', 'quantity', 'price', 'total_price']
-        read_only_fields = ['id', 'price']
+        read_only_fields = ['id', 'price', 'total_price']
         extra_kwargs = {
             'item_id': {'required': True},
             'quantity': {'required': True},
@@ -36,6 +37,12 @@ class CartItemSerializer(serializers.ModelSerializer):
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.save()
         return instance
+
+    def validate(self, attrs):
+        if self.instance:
+            if self.instance.id != self.context['request'].user.cart.id:
+                raise ValidationError('Сan not change the cart item that exists in the order!')
+        return attrs
 
 
 class CartSerializer(serializers.ModelSerializer):
